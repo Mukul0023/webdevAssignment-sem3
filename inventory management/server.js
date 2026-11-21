@@ -9,18 +9,18 @@ connectDB();
 
 const app = express();
 
-// Body parser middleware
+
 app.use(express.json());
 
-// Routes
+
 app.use('/api/products', productRoutes);
 
-// Health check route
+
 app.get('/', (req, res) => {
   res.send('Inventory and Data Management API is running...');
 });
 
-// Centralized Error Handler
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
