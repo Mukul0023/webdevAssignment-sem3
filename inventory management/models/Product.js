@@ -49,7 +49,7 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-// Virtual field: stockValue = price * quantity (Exact match with expected output)
+
 productSchema.virtual('stockValue').get(function () {
   return this.price * this.quantity;
 });
