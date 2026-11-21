@@ -1,7 +1,6 @@
 const Product = require('../models/Product');
 
-// @desc    Create new product
-// @route   POST /api/products
+
 exports.createProduct = async (req, res, next) => {
   try {
     const product = await Product.create(req.body);
@@ -11,13 +10,12 @@ exports.createProduct = async (req, res, next) => {
   }
 };
 
-// @desc    Get all products (Filtering, Sorting, Pagination)
-// @route   GET /api/products
+
 exports.getAllProducts = async (req, res, next) => {
   try {
     const { category, supplier, search, minPrice, maxPrice, sort, page = 1, limit = 10 } = req.query;
 
-    // 1. Filtering
+    
     const filter = {};
     if (category) filter.category = category;
     if (supplier) filter.supplier = { $regex: supplier, $options: 'i' };
@@ -33,13 +31,13 @@ exports.getAllProducts = async (req, res, next) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice);
     }
 
-    // 2. Sorting
+    
     let sortOption = '-createdAt'; // Default newest first
     if (sort) {
       sortOption = sort.split(',').join(' ');
     }
 
-    // 3. Pagination
+    
     const pageNum = Math.max(1, parseInt(page, 10));
     const limitNum = Math.max(1, parseInt(limit, 10));
     const skip = (pageNum - 1) * limitNum;
@@ -64,8 +62,7 @@ exports.getAllProducts = async (req, res, next) => {
   }
 };
 
-// @desc    Get single product by ID
-// @route   GET /api/products/:id
+
 exports.getProductById = async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -79,8 +76,7 @@ exports.getProductById = async (req, res, next) => {
   }
 };
 
-// @desc    Update product details
-// @route   PUT /api/products/:id
+
 exports.updateProduct = async (req, res, next) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
@@ -99,8 +95,7 @@ exports.updateProduct = async (req, res, next) => {
   }
 };
 
-// @desc    Safe stock adjustment (Restock / Sale)
-// @route   PATCH /api/products/:id/stock
+
 exports.adjustStock = async (req, res, next) => {
   try {
     const { change } = req.body;
@@ -134,8 +129,7 @@ exports.adjustStock = async (req, res, next) => {
   }
 };
 
-// @desc    Delete product
-// @route   DELETE /api/products/:id
+
 exports.deleteProduct = async (req, res, next) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
@@ -153,8 +147,7 @@ exports.deleteProduct = async (req, res, next) => {
   }
 };
 
-// @desc    Low-Stock Alert Report (quantity <= reorderLevel)
-// @route   GET /api/products/low-stock
+
 exports.getLowStockProducts = async (req, res, next) => {
   try {
     const items = await Product.aggregate([
@@ -180,8 +173,7 @@ exports.getLowStockProducts = async (req, res, next) => {
   }
 };
 
-// @desc    Category-wise Inventory Summary (Aggregation)
-// @route   GET /api/products/summary
+
 exports.getCategorySummary = async (req, res, next) => {
   try {
     const summary = await Product.aggregate([
